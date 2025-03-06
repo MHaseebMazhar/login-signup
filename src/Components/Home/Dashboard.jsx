@@ -23,12 +23,15 @@ const Dashboard = () => {
 
   }
   const handleEditClick = (user) => {
-   // localStorage.setItem("editUser", JSON.stringify(user));
-    // Store selected user
     navigate("/add-user", { state: { user } });
-    // navigate("/add-user"); // Navigate to Add User screen
   };
   
+  const handleRemoveClick = (index) => {
+    const newUsers = [...users];
+    newUsers.splice(index, 1);
+    setUsers(newUsers);
+    localStorage.setItem("users", JSON.stringify(newUsers));
+  };
   return (
    <div className="container" style={{ textAlign: "center" }}>
          <button id="setting" onClick={handleSetClick}>Setting</button>
@@ -50,6 +53,7 @@ const Dashboard = () => {
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Edit</th>
+                <th>Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -58,7 +62,8 @@ const Dashboard = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
-                  <button class="edit-button" onClick={() => handleEditClick(user)}>Edit</button> 
+                  <td><button class="edit-button" onClick={() => handleEditClick(user)}>Edit</button> </td>
+                 <td> <button class="remove-button" onClick={() => handleRemoveClick(index)}>Remove</button></td>
                 </tr>
               ))}
             </tbody>

@@ -36,7 +36,7 @@ debugger;
   debugger;
   // Handle form submission
 
-  const handleSubmit = ([name,email,phone]) => {
+  const handleSubmit = () => {
     
     let storedUsers =  localStorage.getItem("users");
     let parsedUsers = [];
@@ -50,20 +50,18 @@ debugger;
     console.error("Error parsing users from localStorage:", error);
     parsedUsers = []; // Reset to empty array if parsing fails
   }
-    // Add new user to the list
-    console.log(name);
-    console.log(email); 
-    console.log(phone);
-    const userNewValues = {
-      name: name,
-      email: email,
-      phone: phone,
-    };
-
-    const updatedUsers = [...parsedUsers, userNewValues];
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    const isChecked = false;
-    localStorage.setItem("isChecked", JSON.stringify(isChecked));
+    if (editingUser) {
+      parsedUsers = parsedUsers.map((user) =>
+        user.email === editingUser.email ? { name, email, phone } : user
+      );
+    } else {
+      // Add new user
+      parsedUsers.push({ name, email, phone });
+    }
+    
+    // Save back to local storage
+    localStorage.setItem("users", JSON.stringify(parsedUsers));
+    localStorage.setItem("isChecked", JSON.stringify(false));
      navigate("/dashboard"); // Navigate back to dashboard
   };
 
@@ -100,7 +98,7 @@ debugger;
           required
         />
 
-        <button className="Submit" onClick={() => handleSubmit([name,email,phone])}>Submit</button> 
+        <button className="Submit" onClick={handleSubmit}>Submit</button> 
       </form>
     </div>
   );
