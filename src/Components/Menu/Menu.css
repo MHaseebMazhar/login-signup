@@ -29,3 +29,8 @@
   width: 200px;
   font-size: 25px;
 }
+.menu-item:hover {
+  border: 5px solid rgb(224, 22, 22);
+  background-color: rgb(52, 153, 52);
+  color: white;
+}

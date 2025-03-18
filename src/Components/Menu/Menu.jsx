@@ -1,23 +1,46 @@
 import React from "react";
 import "./Menu.css";
+import { useNavigate } from "react-router-dom";
+
 const Menu = () => {
+  const navigate = useNavigate();
+  const handleHomeClick = () => {
+    navigate("/home");
+  };
+  const handleAboutUsClick = () => {
+    navigate("/about-us");
+  };
+  const handleContactUsClick = () => {
+    navigate("/contact-us");
+  };
+  const handleOurServicesClick = () => {
+    navigate("/our-services");
+  };
+  const handlePortfolioClick = () => {
+    navigate("/portfolio");
+  };
+  const handleBlogClick = () => {
+    navigate("/blog");
+  };
+  const handleCareerClick = () => {
+    navigate("/career");
+  };
+  const handleSettingClick = () => {
+    navigate("/setting");
+  };
+
   return (
     <div>
       <h1 className="Menu">Menu</h1>
-      <div className="menu-container" onClick={() => alert("Clicked")}>
-        <div className="menu-item">Dashboard
-         
-          
-        </div>
-        <div className="menu-item">Menu</div>
-        <div className="menu-item">Home</div>
-        <div className="menu-item">About</div>
-        <div className="menu-item">Contact</div>
-        <div className="menu-item">Services</div>
-        <div className="menu-item">Portfolio</div>
-        <div className="menu-item">Blog</div>
-        <div className="menu-item">Career</div>
-        <div className="menu-item">Setting</div>
+      <div className="menu-container">
+        <div className="menu-item" onClick={handleHomeClick}>Home</div>
+        <div className="menu-item" onClick={handleAboutUsClick}>About Us</div>
+        <div className="menu-item" onClick={handleContactUsClick}>Contact Us</div>
+        <div className="menu-item" onClick={handleOurServicesClick}>Our Services</div>
+        <div className="menu-item" onClick={handlePortfolioClick}>Portfolio</div>
+        <div className="menu-item" onClick={handleBlogClick}>Blog</div>
+        <div className="menu-item" onClick={handleCareerClick}>Career</div>
+        <div className="menu-item" onClick={handleSettingClick}>Setting</div>
       </div>
 
 

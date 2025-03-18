@@ -8,12 +8,8 @@ const Dashboard = () => {
   const loggedInUser = location.state || {};
 
   useEffect(() => {
-    const isChecked = JSON.parse(localStorage.getItem("isChecked")) || false;
-    if (!isChecked) {
-      const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
       setUsers(storedUsers);
-    }else{
-    }
   }, []);
   const handleSetClick = () => {
     navigate("/setting");
@@ -58,7 +54,7 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {users.map((user, index) => (
-                <tr key={index}>
+                <tr >
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>

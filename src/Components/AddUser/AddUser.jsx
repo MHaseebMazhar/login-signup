@@ -1,5 +1,5 @@
-import React, { useState,useEffect} from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./AddUser.css";
 const AddUser = () => {
   const navigate = useNavigate();
@@ -16,40 +16,41 @@ const AddUser = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
-
-debugger;
+  debugger;
   // Set name field when editing
   useEffect(() => {
     if (editingUser) {
       setName(editingUser.name);
       setEmail(editingUser.email);
       setPhone(editingUser.phone);
-    }else{
-      setName("");
-      setEmail("");
-      setPhone("");
-     // localStorage.removeItem("users");
+
+      // localStorage.removeItem("users");
     }
   }, [editingUser]);
 
- 
   debugger;
   // Handle form submission
 
   const handleSubmit = () => {
-    
-    let storedUsers =  localStorage.getItem("users");
+    let storedUsers = localStorage.getItem("users");
     let parsedUsers = [];
 
-  try {
-    parsedUsers = storedUsers ? JSON.parse(storedUsers) : [];
-    if (!Array.isArray(parsedUsers)) {
-      throw new Error("Invalid users data in localStorage.");
+    try {
+      parsedUsers = storedUsers ? JSON.parse(storedUsers) : [];
+      if (!Array.isArray(parsedUsers)) {
+        throw new Error("Invalid users data in localStorage.");
+      }
+    } catch (error) {
+      console.error("Error parsing users from localStorage:", error);
+      parsedUsers = []; // Reset to empty array if parsing fails
     }
-  } catch (error) {
-    console.error("Error parsing users from localStorage:", error);
-    parsedUsers = []; // Reset to empty array if parsing fails
-  }
+
+    if (isEmailExiist(email)) {
+      alert("Email already exisit :" + email);
+    } else {
+      localStorage.setItem("users", JSON.stringify(storedUsers));
+    }
+
     if (editingUser) {
       parsedUsers = parsedUsers.map((user) =>
         user.email === editingUser.email ? { name, email, phone } : user
@@ -58,24 +59,41 @@ debugger;
       // Add new user
       parsedUsers.push({ name, email, phone });
     }
-    
+
     // Save back to local storage
     localStorage.setItem("users", JSON.stringify(parsedUsers));
     localStorage.setItem("isChecked", JSON.stringify(false));
-     navigate("/dashboard"); // Navigate back to dashboard
+    navigate("/dashboard"); // Navigate back to dashboard
   };
+
+  function isEmailExiist(email) {
+    debugger;
+    const storedUsers =
+      localStorage.getItem("users") !== null
+        ? JSON.parse(localStorage.getItem("users"))
+        : [];
+    // Checking each object from songs
+    for (let i = 0; i < storedUsers.length; i++) {
+      if (storedUsers[i]?.email === email) {
+        return true; // return immediately when finding that the song exists
+      }
+    }
+    return false; // song doesn't exist
+  }
+    function myfunction() {
+    console.log("CLICKED");
+};
 
   return (
     <div className="container">
-   
       <h2>Add New User</h2>
       <form>
         <input
           type="text"
           name="name"
-          placeholder="Enter Name" 
+          placeholder="Enter Name"
           value={name}
-          onChange={(userNewValue) => setName(userNewValue.target.value)}  
+          onChange={(userNewValue) => setName(userNewValue.target.value)}
           required
         />
         <input
@@ -83,8 +101,7 @@ debugger;
           name="email"
           placeholder="Enter Email"
           value={email}
-          onChange={(userNewValue) => setEmail(userNewValue.target.value)} 
-       
+          onChange={(userNewValue) => setEmail(userNewValue.target.value)}
           required
         />
         <input
@@ -92,17 +109,18 @@ debugger;
           name="phone"
           placeholder="Enter Phone Number"
           value={phone}
-          onChange={(userNewValue) => setPhone(userNewValue.target.value)} 
-       
-
+          onChange={(userNewValue) => setPhone(userNewValue.target.value)}
           required
         />
+    <button><img src="./img/google.png" alt="my image" onClick={myfunction()} /></button>
 
-        <button className="Submit" onClick={handleSubmit}>Submit</button> 
+
+        <button className="Submit" onClick={handleSubmit}>
+          Submit
+        </button>
       </form>
     </div>
   );
 };
 
 export default AddUser;
-
