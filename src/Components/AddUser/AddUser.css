@@ -16,7 +16,7 @@ input {
   font-size: 16px;
 }
 
-button {
+.Submit {
   padding: 10px;
   background-color: #28a745;
   color: white;
@@ -24,6 +24,17 @@ button {
   cursor: pointer;
 }
 
+button {
+  padding: 10px;
+  background-color: #060f08;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
 button:hover {
+  background-color: #215f88;
+}
+
+.Submit:hover {
   background-color: #218838;
 }

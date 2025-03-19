@@ -12,7 +12,7 @@ const Dashboard = () => {
       setUsers(storedUsers);
   }, []);
   const handleSetClick = () => {
-    navigate("/setting");
+    navigate("/settings");
   };
   const handleMenuClick = () => {
     navigate("/menu");
@@ -30,7 +30,7 @@ const Dashboard = () => {
   };
   return (
    <div className="container" style={{ textAlign: "center" }}>
-         <button id="setting" onClick={handleSetClick}>Setting</button>
+         <button id="setting" onClick={handleSetClick}>Settings</button>
          <button id= "Menu" onClick={handleMenuClick}>Menu</button>
       <h2 className="text">Dashboard</h2>
        <div>

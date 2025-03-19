@@ -1,9 +1,9 @@
 import React from 'react';
-import './setting.css';
+import './settings.css';
 function Settings() {
   return (
 <header>
-<h1 className='Setting'>Setting</h1>
+<h1 className='Settings'>Settings</h1>
 </header>
   );
 }

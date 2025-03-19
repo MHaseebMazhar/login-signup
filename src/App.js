@@ -7,7 +7,7 @@ import LoginSignup from "./Components/LoginSignup/LoginSignup";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import ClassUrl from "./Components/Url/ClassUrl";
 import GSM from "./Components/GSM/gsm";
-import Settings from "./Components/setting/setting";
+import Settings from "./Components/settings/settings";
 import Menu from "./Components/Menu/Menu";
 import Home from "./Components/Menu/Home/Home";
 import AboutUs from "./Components/Menu/AboutUs/AboutUs";

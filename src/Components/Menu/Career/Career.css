@@ -1,4 +1,4 @@
-.blog {
+.career {
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -8,5 +8,5 @@
   padding-bottom: 30px;
   border-radius: 9px;
   font: 1em sans-serif;
-  color: #270303;
+  color: #131010;
 }

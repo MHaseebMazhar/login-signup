@@ -9,13 +9,10 @@ const AddUser = () => {
     email: "",
     phone: "",
   });
-
   const editingUser = location.state?.user || null; // Get user if editing
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-
   debugger;
   // Set name field when editing
   useEffect(() => {
@@ -23,14 +20,11 @@ const AddUser = () => {
       setName(editingUser.name);
       setEmail(editingUser.email);
       setPhone(editingUser.phone);
-
       // localStorage.removeItem("users");
     }
   }, [editingUser]);
-
   debugger;
   // Handle form submission
-
   const handleSubmit = () => {
     let storedUsers = localStorage.getItem("users");
     let parsedUsers = [];
@@ -65,7 +59,14 @@ const AddUser = () => {
     localStorage.setItem("isChecked", JSON.stringify(false));
     navigate("/dashboard"); // Navigate back to dashboard
   };
-
+  const [file, setFile] = useState();
+    function handleChange(e) {
+        console.log(e.target.files);
+        setFile(URL.createObjectURL(e.target.files[0]));
+    }
+  function myfunction() {
+    console.log("CLICKED");
+  }
   function isEmailExiist(email) {
     debugger;
     const storedUsers =
@@ -80,10 +81,6 @@ const AddUser = () => {
     }
     return false; // song doesn't exist
   }
-    function myfunction() {
-    console.log("CLICKED");
-};
-
   return (
     <div className="container">
       <h2>Add New User</h2>
@@ -112,9 +109,8 @@ const AddUser = () => {
           onChange={(userNewValue) => setPhone(userNewValue.target.value)}
           required
         />
-    <button><img src="./img/google.png" alt="my image" onClick={myfunction()} /></button>
-
-
+        <input type="file" onChange={handleChange} />
+        <img src={file} />
         <button className="Submit" onClick={handleSubmit}>
           Submit
         </button>
@@ -122,5 +118,4 @@ const AddUser = () => {
     </div>
   );
 };
-
 export default AddUser;

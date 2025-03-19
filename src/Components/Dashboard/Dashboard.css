@@ -130,3 +130,19 @@ border-radius: 12px;
 border-radius: 12px;
   background: #b90505;
 } 
+
+.edit-button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.remove-button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
