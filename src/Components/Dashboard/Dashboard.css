@@ -151,3 +151,24 @@ border-radius: 12px;
   height: 50px;
   border-radius: 50%;
 }
+table img {
+  object-fit: cover;
+}
+
+.edit-button, .remove-button {
+  padding: 5px 10px;
+  margin: 2px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.remove-button {
+  background-color: #f44336;
+  color: white;
+}

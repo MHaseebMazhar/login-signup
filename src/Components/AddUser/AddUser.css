@@ -38,3 +38,34 @@ button:hover {
 .Submit:hover {
   background-color: #218838;
 }
+.image-upload-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-upload-label {
+  padding: 10px 15px;
+  background-color: #0703e7;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.image-upload-label:hover {
+  background-color: #f10808;
+}
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview img {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}

@@ -54,14 +54,14 @@ const AddUser = () => {
     
     // Save back to local storage
     localStorage.setItem("users", JSON.stringify(parsedUsers));
-    localStorage.setItem("isChecked", JSON.stringify(false));
+    // localStorage.setItem("isChecked", JSON.stringify(false));
     navigate("/dashboard"); // Navigate back to dashboard
   };
   function handleChange(e) {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
-      const imageUrl = URL.createObjectURL(uploadedFile);
-      setFile(imageUrl);   
+      const filePath = `/uploads/${uploadedFile.name}`;
+      setFile(filePath); 
     }}
   function isEmailExiist(email) {
     const storedUsers =
@@ -105,7 +105,7 @@ const AddUser = () => {
           required
         />
         <input type="file" onChange={handleChange} />
-        <img src={file} />
+        <img src={file} alt="" />
        
         <button className="Submit" onClick={handleSubmit}>
           Submit

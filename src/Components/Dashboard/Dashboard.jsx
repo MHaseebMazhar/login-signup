@@ -87,12 +87,13 @@ const Dashboard = () => {
                     </button>
                   </td>
                   <td>
-        {user.file ? (
-          <img className="img" src={user.file} alt="User"/>
-        ) : (
-          "No Image"
-        )}
-      </td>
+  {user.file ? (
+    <img src={window.location.origin + '/DSC_0081.JPG'}alt="User" style={{ width: "50px", height: "50px" }} />
+  ) : (
+    "No Image"
+  )}
+</td>
+
                 </tr>
               ))}
             </tbody>
