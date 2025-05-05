@@ -27,6 +27,7 @@ const Dashboard = () => {
   };
   return (
     <div className="container" style={{ textAlign: "center" }}>
+      
       <button id="setting" onClick={handleSetClick}>
         Settings
       </button>
