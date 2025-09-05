@@ -29,61 +29,66 @@ const LoginSignup = () => {
   }, []);
 
   // ✅ API login
-  const handleLoginClick = async () => {
-    if (action === "Sign Up") {
-      setAction("Login");
-      setName("");
-      setEmail("");
-      setPassword("");
-      return;
-    }
+const handleLoginClick = async () => {
+  if (action === "Sign Up") {
+    setAction("Login");
+    setName("");
+    setEmail("");
+    setPassword("");
+    return;
+  }
 
-    if (!username) {
-      setValidationMessage("Please enter your username.");
-      return;
-    }
-    if (!password) {
-      setValidationMessage("Please enter your password.");
-      return;
-    }
+  if (!username) {
+    setValidationMessage("Please enter your username.");
+    return;
+  }
+  if (!password) {
+    setValidationMessage("Please enter your password.");
+    return;
+  }
 
-    try {
-      const response = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-          expiresInMins: 30,
-        }),
-      });
+  try {
+    const response = await fetch("https://dummyjson.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        expiresInMins: 30,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        console.log("Login success:", data);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data));
+    if (response.ok) {
+      
 
-        if (rememberMe) {
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
-          localStorage.setItem("rememberMe", "true");
-        } else {
-          localStorage.removeItem("username");
-          localStorage.removeItem("password");
-          localStorage.removeItem("rememberMe");
-        }
+      // Save data in localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data));
 
-        navigate("/dashboard", { state: { username, isSignup: false } });
+      if (rememberMe) {
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+        localStorage.setItem("rememberMe", "true");
       } else {
-        setValidationMessage(data.message || "Login failed. Try again.");
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+        localStorage.removeItem("rememberMe");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setValidationMessage("Something went wrong. Please try again.");
+
+      // ✅ Abhi navigate ni karna, sirf alert
+      navigate("/dashboard", { state: { userData: data, isSignup: false } });
+
+    } else {
+      setValidationMessage(data.message || "Login failed. Try again.");
     }
-  };
+  } catch (error) {
+    console.error("Error:", error);
+    setValidationMessage("Something went wrong. Please try again.");
+  }
+};
+
 
   // ✅ Signup
   const handleSignupClick = () => {
