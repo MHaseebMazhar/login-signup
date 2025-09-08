@@ -29,66 +29,63 @@ const LoginSignup = () => {
   }, []);
 
   // ✅ API login
-const handleLoginClick = async () => {
-  if (action === "Sign Up") {
-    setAction("Login");
-    setName("");
-    setEmail("");
-    setPassword("");
-    return;
-  }
-
-  if (!username) {
-    setValidationMessage("Please enter your username.");
-    return;
-  }
-  if (!password) {
-    setValidationMessage("Please enter your password.");
-    return;
-  }
-
-  try {
-    const response = await fetch("https://dummyjson.com/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-        expiresInMins: 30,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      
-
-      // Save data in localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data));
-
-      if (rememberMe) {
-        localStorage.setItem("username", username);
-        localStorage.setItem("password", password);
-        localStorage.setItem("rememberMe", "true");
-      } else {
-        localStorage.removeItem("username");
-        localStorage.removeItem("password");
-        localStorage.removeItem("rememberMe");
-      }
-
-      // ✅ Abhi navigate ni karna, sirf alert
-      navigate("/dashboard", { state: { userData: data, isSignup: false } });
-
-    } else {
-      setValidationMessage(data.message || "Login failed. Try again.");
+  const handleLoginClick = async () => {
+    if (action === "Sign Up") {
+      setAction("Login");
+      setName("");
+      setEmail("");
+      setPassword("");
+      return;
     }
-  } catch (error) {
-    console.error("Error:", error);
-    setValidationMessage("Something went wrong. Please try again.");
-  }
-};
 
+    if (!username) {
+      setValidationMessage("Please enter your username.");
+      return;
+    }
+    if (!password) {
+      setValidationMessage("Please enter your password.");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://dummyjson.com/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          expiresInMins: 30,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Save data in localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data));
+
+        if (rememberMe) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
+          localStorage.setItem("rememberMe", "true");
+        } else {
+          localStorage.removeItem("username");
+          localStorage.removeItem("password");
+          localStorage.removeItem("rememberMe");
+        }
+        // ✅ Save user data in context for GSM
+        setUser(data);
+        // ✅ Abhi navigate ni karna, sirf alert
+        navigate("/dashboard", { state: { userData: data, isSignup: false } });
+      } else {
+        setValidationMessage(data.message || "Login failed. Try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setValidationMessage("Something went wrong. Please try again.");
+    }
+  };
 
   // ✅ Signup
   const handleSignupClick = () => {
@@ -104,7 +101,9 @@ const handleLoginClick = async () => {
       return;
     }
 
-    navigate("/dashboard", { state: { name, email, password, isSignup: true } });
+    navigate("/dashboard", {
+      state: { name, email, password, isSignup: true },
+    });
   };
 
   // ✅ ClassUrl
@@ -113,7 +112,9 @@ const handleLoginClick = async () => {
       setValidationMessage("Enter name/username first.");
       return;
     }
-    navigate(`/classurl/${username || name}/${email || "no-email"}/${password}`);
+    navigate(
+      `/classurl/${username || name}/${email || "no-email"}/${password}`
+    );
   };
 
   // ✅ GSM
@@ -122,9 +123,10 @@ const handleLoginClick = async () => {
       setValidationMessage("Enter name/username first.");
       return;
     }
-    const confirmNavigation = window.confirm("Are you sure you want to navigate to GSM?");
-    if (!confirmNavigation) return;
-    setUser({ name: name || username, email, password });
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (savedUser) {
+      setUser(savedUser);
+    }
     navigate("/gsm");
   };
 
@@ -135,7 +137,9 @@ const handleLoginClick = async () => {
         <div className="underline"></div>
       </div>
 
-      {validationMessage && <div className="validation-message">{validationMessage}</div>}
+      {validationMessage && (
+        <div className="validation-message">{validationMessage}</div>
+      )}
 
       <div className="inputs">
         {action === "Sign Up" ? (
@@ -208,13 +212,21 @@ const handleLoginClick = async () => {
 
       <div className="submit-container">
         <div
-          className={action === "Login" || action === "ClassUrl" ? "submit gray" : "submit"}
+          className={
+            action === "Login" || action === "ClassUrl"
+              ? "submit gray"
+              : "submit"
+          }
           onClick={handleSignupClick}
         >
           Sign Up
         </div>
         <div
-          className={action === "Sign Up" || action === "ClassUrl" ? "submit gray" : "submit"}
+          className={
+            action === "Sign Up" || action === "ClassUrl"
+              ? "submit gray"
+              : "submit"
+          }
           onClick={handleLoginClick}
         >
           Login
