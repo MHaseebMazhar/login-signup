@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import "./LoginSignup.css";
@@ -7,7 +7,7 @@ import email_icon from "../Assets/email.png";
 import password_icon from "../Assets/password.png";
 
 const LoginSignup = () => {
-  const [action, setAction] = useState("Login");
+  const [action, setAction] = useState("Login"); // default login
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,93 +17,76 @@ const LoginSignup = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("username");
-    const savedPassword = localStorage.getItem("password");
-    const savedRemember = localStorage.getItem("rememberMe") === "true";
-    if (savedRemember && savedUser && savedPassword) {
-      setUsername(savedUser);
-      setPassword(savedPassword);
-      setRememberMe(savedRemember);
-    }
-  }, []);
+ // ✅ Login
+const handleLoginClick = async () => {
+  if (!username || !password) {
+    setValidationMessage("Please enter username & password.");
+    return;
+  }
 
-  // ✅ API login
-  const handleLoginClick = async () => {
-    if (action === "Sign Up") {
-      setAction("Login");
-      setName("");
-      setEmail("");
-      setPassword("");
-      return;
-    }
+  try {
+    const response = await fetch("https://dummyjson.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        expiresInMins: 30,
+      }),
+    });
 
-    if (!username) {
-      setValidationMessage("Please enter your username.");
-      return;
-    }
-    if (!password) {
-      setValidationMessage("Please enter your password.");
-      return;
-    }
+    const data = await response.json();
 
-    try {
-      const response = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-          expiresInMins: 30,
-        }),
-      });
+    if (response.ok) {
+      localStorage.setItem("token", data.token);
 
-      const data = await response.json();
+      // ✅ Sirf user ka data store karna
+      const userData = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender,
+      };
 
-      if (response.ok) {
-        // Save data in localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(userData));
 
-        if (rememberMe) {
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
-          localStorage.setItem("rememberMe", "true");
-        } else {
-          localStorage.removeItem("username");
-          localStorage.removeItem("password");
-          localStorage.removeItem("rememberMe");
-        }
-        // ✅ Save user data in context for GSM
-        setUser(data);
-        // ✅ Abhi navigate ni karna, sirf alert
-        navigate("/dashboard", { state: { userData: data, isSignup: false } });
+      if (rememberMe) {
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+        localStorage.setItem("rememberMe", "true");
       } else {
-        setValidationMessage(data.message || "Login failed. Try again.");
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+        localStorage.removeItem("rememberMe");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setValidationMessage("Something went wrong. Please try again.");
+
+      setUser(userData);
+      navigate("/dashboard", { state: { userData, isSignup: false } });
+    } else {
+      setValidationMessage(data.message || "Login failed. Try again.");
     }
-  };
+  } catch (error) {
+    console.error("Error:", error);
+    setValidationMessage("Something went wrong. Please try again.");
+  }
+};
+
 
   // ✅ Signup
   const handleSignupClick = () => {
-    if (action === "Login") {
-      setAction("Sign Up");
-      setUsername("");
-      setPassword("");
-      return;
-    }
-
     if (!name || !email || !password) {
       setValidationMessage("Please fill all fields.");
       return;
     }
 
-    navigate("/dashboard", {
-      state: { name, email, password, isSignup: true },
-    });
+    const signupData = { name, email, password };
+
+    localStorage.setItem("user", JSON.stringify(signupData));
+    setUser(signupData);
+
+    navigate("/dashboard", { state: { ...signupData, isSignup: true } });
   };
 
   // ✅ ClassUrl
@@ -119,10 +102,6 @@ const LoginSignup = () => {
 
   // ✅ GSM
   const handleClassGSMClick = () => {
-    if (!username && !name) {
-      setValidationMessage("Enter name/username first.");
-      return;
-    }
     const savedUser = JSON.parse(localStorage.getItem("user"));
     if (savedUser) {
       setUser(savedUser);
@@ -212,37 +191,37 @@ const LoginSignup = () => {
 
       <div className="submit-container">
         <div
-          className={
-            action === "Login" || action === "ClassUrl"
-              ? "submit gray"
-              : "submit"
-          }
+          className={action === "Sign Up" ? "submit" : "submit gray"}
           onClick={handleSignupClick}
         >
           Sign Up
         </div>
         <div
-          className={
-            action === "Sign Up" || action === "ClassUrl"
-              ? "submit gray"
-              : "submit"
-          }
+          className={action === "Login" ? "submit" : "submit gray"}
           onClick={handleLoginClick}
         >
           Login
         </div>
-        <div
-          className={action === "ClassUrl" ? "submit" : "submit gray"}
-          onClick={handleClassUrlClick}
-        >
+        <div className="submit" onClick={handleClassUrlClick}>
           ClassUrl
         </div>
-        <div
-          className={action === "ClassUrl" ? "submit" : "submit gray"}
-          onClick={handleClassGSMClick}
-        >
+        <div className="submit" onClick={handleClassGSMClick}>
           GSM
         </div>
+      </div>
+
+      <div className="toggle-action">
+        {action === "Login" ? (
+          <p>
+            Don’t have an account?{" "}
+            <span onClick={() => setAction("Sign Up")}>Sign Up</span>
+          </p>
+        ) : (
+          <p>
+            Already have an account?{" "}
+            <span onClick={() => setAction("Login")}>Login</span>
+          </p>
+        )}
       </div>
     </div>
   );

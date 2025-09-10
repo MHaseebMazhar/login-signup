@@ -1,15 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Dashboard.css";
+
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const loggedInUser = location.state || {};
+
+  // ✅ Local + API dono load karna
+  const loadUsers = async () => {
+    // Local users
+    const localUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // API users
+    let apiUsers = [];
+    try {
+      const res = await fetch("https://dummyjson.com/users");
+      const data = await res.json();
+      apiUsers = data.users || [];
+    } catch (err) {
+      console.error("API fetch error:", err);
+    }
+
+    // ✅ Merge dono lists (local users ko upar rakho)
+    setUsers([...localUsers, ...apiUsers]);
+  };
+
   useEffect(() => {
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    setUsers(storedUsers);
-  }, []);
+    loadUsers();
+  }, [location]); // 👈 har navigate/update pe reload
+  
+
   const handleSetClick = () => {
     navigate("/settings");
   };
@@ -25,9 +47,9 @@ const Dashboard = () => {
     setUsers(newUsers);
     localStorage.setItem("users", JSON.stringify(newUsers));
   };
+
   return (
     <div className="container" style={{ textAlign: "center" }}>
-      
       <button id="setting" onClick={handleSetClick}>
         Settings
       </button>
@@ -46,9 +68,11 @@ const Dashboard = () => {
           <strong>Password:</strong> {loggedInUser.password}
         </p>
       </div>
+
       <button className="plus-button" onClick={() => navigate("/add-user")}>
         +
       </button>
+
       {users.length > 0 ? (
         <div>
           <h3>All Users</h3>
@@ -66,44 +90,53 @@ const Dashboard = () => {
             <tbody>
               {users.map((user, index) => (
                 <tr key={index}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                 
+                  <td>
+                    {user.name || `${user.firstName || ""} ${user.lastName || ""}`}
+                  </td>
+                  <td>{user.email || "N/A"}</td>
+                  <td>{user.phone || "N/A"}</td>
+
                   <td>
                     <button
-                      class="edit-button"
+                      className="edit-button"
                       onClick={() => handleEditClick(user)}
                     >
                       Edit
-                    </button>{" "}
+                    </button>
                   </td>
                   <td>
-                    {" "}
                     <button
-                      class="remove-button"
+                      className="remove-button"
                       onClick={() => handleRemoveClick(index)}
                     >
                       Remove
                     </button>
                   </td>
                   <td>
-  {user.file ? (
-    <img src={window.location.origin + '/DSC_0081.JPG'}alt="User" style={{ width: "50px", height: "50px" }} />
-  ) : (
-    "No Image"
-  )}
-</td>
-
+                    {user.file || user.image ? (
+                      <img
+                        src={user.file || user.image}
+                        alt="User"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      "No Image"
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       ) : (
-        <p></p>
+        <p>No users found</p>
       )}
     </div>
   );
 };
+
 export default Dashboard;
