@@ -17,7 +17,7 @@ import Portfolio from "./Components/Menu/Portfolio/Portfolio";
 import Blog from "./Components/Menu/Blog/Blog";
 import Career from "./Components/Menu/Career/Career";
 import Setting from "./Components/Menu/Setting/Setting";
-
+import UserDetail from "./Components/Detail/Detail"; // ✅ FIXED'
 function App() {
   return (
     <AuthProvider>
@@ -27,6 +27,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} /> {/* ✅ Only one */}
           <Route path="/classurl/:name/:email/:password" element={<ClassUrl />} />
           <Route path="/gsm" element={<GSM />} />
+          <Route path="/user/:id" element={<UserDetail />} /> {/* ✅ FIXED */}
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/menu" element={<Menu />} />

@@ -11,17 +11,18 @@ const GSM = () => {
   const usersPerPage = 30;
   const [totalUsers, setTotalUsers] = useState(0);
 
-  const [showModal, setShowModal] = useState(false);   // ✅ modal state
+  const [showModal, setShowModal] = useState(false); // ✅ modal state
   const [userToDelete, setUserToDelete] = useState(null); // ✅ selected user
 
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const skip = (currentPage - 1) * usersPerPage;
         const res = await fetch(
-           `https://dummyjson.com/users?limit=${usersPerPage}&skip=${skip}`
+          `https://dummyjson.com/users?limit=${usersPerPage}&skip=${skip}`
         );
         const data = await res.json();
         setApiUsers(data.users || []);
@@ -73,9 +74,12 @@ const GSM = () => {
     if (!userToDelete) return;
 
     try {
-      const res = await fetch(`https://dummyjson.com/users/${userToDelete.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `https://dummyjson.com/users/${userToDelete.id}`,
+        {
+          method: "DELETE",
+        }
+      );
       const deletedUser = await res.json();
       console.log("Deleted Response:", deletedUser);
 
@@ -96,10 +100,19 @@ const GSM = () => {
       {loggedUser && (
         <div className="login-card">
           <h3>🔑 Logged In User</h3>
-          <p><strong>ID:</strong> {loggedUser.id || "N/A"}</p>
-          <p><strong>Username:</strong> {loggedUser.username || loggedUser.name || "N/A"}</p>
-          <p><strong>Email:</strong> {loggedUser.email || "N/A"}</p>
-          <p><strong>Gender:</strong> {loggedUser.gender || "N/A"}</p>
+          <p>
+            <strong>ID:</strong> {loggedUser.id || "N/A"}
+          </p>
+          <p>
+            <strong>Username:</strong>{" "}
+            {loggedUser.username || loggedUser.name || "N/A"}
+          </p>
+          <p>
+            <strong>Email:</strong> {loggedUser.email || "N/A"}
+          </p>
+          <p>
+            <strong>Gender:</strong> {loggedUser.gender || "N/A"}
+          </p>
         </div>
       )}
 
@@ -109,7 +122,11 @@ const GSM = () => {
           <div key={u.id} className="deal-card">
             <img src={u.image} alt={u.firstName} className="user-photo" />
             <p className="brand">@{u.username}</p>
-            <h3><b>{u.firstName} {u.lastName}</b></h3>
+            <h3>
+              <b>
+                {u.firstName} {u.lastName}
+              </b>
+            </h3>
             <div className="price">
               <span className="new-price">📧 {u.email}</span>
               <span className="old-price">📞 {u.phone}</span>
@@ -117,17 +134,17 @@ const GSM = () => {
 
             {/* ✅ Buttons */}
             <div className="user-actions">
-              <button 
-                className="add-btn"
-                onClick={() => handleUserClick(u)}
-              >
-                ➕ Add/Edit
+              <button className="add-btn" onClick={() => handleUserClick(u)}>
+                ➕ Edit
               </button>
-              <button 
-                className="delete-btn"
-                onClick={() => confirmDelete(u)}
-              >
+              <button className="delete-btn" onClick={() => confirmDelete(u)}>
                 ❌ Delete
+              </button>
+              <button
+                className="detail-btn"
+                onClick={() => navigate(`/user/${u.id}`)}
+              >
+                📋 Detail
               </button>
             </div>
           </div>
@@ -136,7 +153,7 @@ const GSM = () => {
 
       {/* ✅ Pagination */}
       <div className="pagination">
-        <button 
+        <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
@@ -153,8 +170,10 @@ const GSM = () => {
           </button>
         ))}
 
-        <button 
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
         >
           Next ➡
@@ -167,14 +186,21 @@ const GSM = () => {
           <div className="modal">
             <h3>⚠ Delete Confirmation</h3>
             <p>
-              Are you sure you want to delete 
-              <b> {userToDelete.firstName} {userToDelete.lastName}</b>?
+              Are you sure you want to delete
+              <b>
+                {" "}
+                {userToDelete.firstName} {userToDelete.lastName}
+              </b>
+              ?
             </p>
             <div className="modal-actions">
               <button className="confirm-btn" onClick={handleDeleteConfirmed}>
                 Yes, Delete
               </button>
-              <button className="cancel-btn" onClick={() => setShowModal(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowModal(false)}
+              >
                 Cancel
               </button>
             </div>
