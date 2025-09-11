@@ -1,25 +1,173 @@
-.user-detail-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+.detail-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  padding: 30px;
+  font-family: "Poppins", sans-serif;
 }
 
-.detail-photo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin-bottom: 15px;
+.detail-card {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0px 12px 35px rgba(0,0,0,0.25);
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 16px 40px rgba(0,0,0,0.35);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
 .back-btn {
-  background: #697480;
+  background: linear-gradient(135deg, #6c63ff, #4f46e5);
   color: white;
   border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.back-btn:hover {
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  transform: scale(1.05);
+}
+
+.detail-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 18px auto;
+  object-fit: cover;
+  border: 5px solid #6c63ff;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+.user-name {
+  margin: 10px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.info-badges {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 15px 0 25px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+.badge.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.badge.green { background: linear-gradient(135deg, #10b981, #059669); }
+.badge.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.info-grid div {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+  border: 1px solid rgba(108, 99, 255, 0.15);
+  box-shadow: inset 0 1px 3px rgba(255,255,255,0.4),
+              0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 45px;
+}
+
+.info-grid div:hover {
+  transform: translateY(-4px) scale(1.02);
+  border: 1px solid rgba(108, 99, 255, 0.4);
+  box-shadow: 0 6px 16px rgba(108, 99, 255, 0.25);
+  background: rgba(240, 240, 255, 0.9);
+}
+
+.info-grid b {
+  color: #111827;
+  font-weight: 600;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* default 2 columns */
+  gap: 18px;
+  text-align: left;
+  margin-top: 20px;
+}
+.info-grid .full-width {
+  grid-column: span 2;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  font-weight: 600;
+}
+
+/* Left & Right decorative lines */
+.info-grid .full-width::before,
+.info-grid .full-width::after {
+  content: "";
+  flex: 1;
+  height: 8px;
+  background: linear-gradient(90deg, transparent, #6c63ff, transparent);
+  margin: 0 10px;
+}
+
+
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #333;
+}
+.spinner {
+  width: 55px;
+  height: 55px;
+  border: 6px solid #eee;
+  border-top: 6px solid #6c63ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
   margin-bottom: 15px;
 }
+@keyframes spin { 100% { transform: rotate(360deg); } }

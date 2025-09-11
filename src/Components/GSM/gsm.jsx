@@ -10,30 +10,33 @@ const GSM = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 30;
   const [totalUsers, setTotalUsers] = useState(0);
+const [loading, setLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false); // ✅ modal state
   const [userToDelete, setUserToDelete] = useState(null); // ✅ selected user
 
   const navigate = useNavigate();
   
+useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      setLoading(true); // ✅ loader start
+      const skip = (currentPage - 1) * usersPerPage;
+      const res = await fetch(
+        `https://dummyjson.com/users?limit=${usersPerPage}&skip=${skip}`
+      );
+      const data = await res.json();
+      setApiUsers(data.users || []);
+      setTotalUsers(data.total || 0);
+    } catch (err) {
+      console.error("API error:", err);
+    } finally {
+      setLoading(false); // ✅ loader end
+    }
+  };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const skip = (currentPage - 1) * usersPerPage;
-        const res = await fetch(
-          `https://dummyjson.com/users?limit=${usersPerPage}&skip=${skip}`
-        );
-        const data = await res.json();
-        setApiUsers(data.users || []);
-        setTotalUsers(data.total || 0);
-      } catch (err) {
-        console.error("API error:", err);
-      }
-    };
-
-    fetchUsers();
-  }, [currentPage]);
+  fetchUsers();
+}, [currentPage]);
 
   useEffect(() => {
     if (user) {
@@ -71,27 +74,35 @@ const GSM = () => {
 
   // ✅ Handle delete after confirmation
   const handleDeleteConfirmed = async () => {
-    if (!userToDelete) return;
+  if (!userToDelete) return;
 
-    try {
-      const res = await fetch(
-        `https://dummyjson.com/users/${userToDelete.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const deletedUser = await res.json();
-      console.log("Deleted Response:", deletedUser);
+  try {
+    setLoading(true); // ✅ loader start
+    const res = await fetch(
+      `https://dummyjson.com/users/${userToDelete.id}`,
+      { method: "DELETE" }
+    );
+    const deletedUser = await res.json();
+    console.log("Deleted Response:", deletedUser);
 
-      // ✅ Remove from frontend list
-      setApiUsers(apiUsers.filter((u) => u.id !== userToDelete.id));
+    setApiUsers(apiUsers.filter((u) => u.id !== userToDelete.id));
+    setShowModal(false);
+    setUserToDelete(null);
+  } catch (err) {
+    console.error("Delete error:", err);
+  } finally {
+    setLoading(false); // ✅ loader end
+  }
+};
+if (loading) {
+  return (
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <p>Loading users...</p>
+    </div>
+  );
+}
 
-      setShowModal(false);
-      setUserToDelete(null);
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
-  };
 
   return (
     <div className="gsm-container">

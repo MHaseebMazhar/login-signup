@@ -121,6 +121,15 @@ const AddUser = () => {
     setLoading(false);
     navigate("/dashboard");
   };
+  if (loading) {
+  return (
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <p>{editingUser ? "Updating user..." : "Adding user..."} </p>
+    </div>
+  );
+}
+
 
   return (
     <div className="container">
