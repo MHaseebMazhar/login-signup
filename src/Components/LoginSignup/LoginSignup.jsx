@@ -110,120 +110,123 @@ const handleLoginClick = async () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <div className="text">{action}</div>
-        <div className="underline"></div>
-      </div>
-
-      {validationMessage && (
-        <div className="validation-message">{validationMessage}</div>
-      )}
-
-      <div className="inputs">
-        {action === "Sign Up" ? (
-          <>
-            <div className="input">
-              <img src={user_icon} alt="user" />
-              <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-
-            <div className="input">
-              <img src={email_icon} alt="email" />
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="input">
-              <img src={password_icon} alt="password" />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="input">
-              <img src={user_icon} alt="user" />
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-
-            <div className="input">
-              <img src={password_icon} alt="password" />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </>
-        )}
-      </div>
-
-      {action === "Login" && (
-        <div className="remember-me">
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={() => setRememberMe(!rememberMe)}
-          />{" "}
-          Remember Me
-        </div>
-      )}
-
-      <div className="submit-container">
-        <div
-          className={action === "Sign Up" ? "submit" : "submit gray"}
-          onClick={handleSignupClick}
-        >
-          Sign Up
-        </div>
-        <div
-          className={action === "Login" ? "submit" : "submit gray"}
-          onClick={handleLoginClick}
-        >
-          Login
-        </div>
-        <div className="submit" onClick={handleClassUrlClick}>
-          ClassUrl
-        </div>
-        <div className="submit" onClick={handleClassGSMClick}>
-          GSM
-        </div>
-      </div>
-
-      <div className="toggle-action">
-        {action === "Login" ? (
-          <p>
-            Don’t have an account?{" "}
-            <span onClick={() => setAction("Sign Up")}>Sign Up</span>
-          </p>
-        ) : (
-          <p>
-            Already have an account?{" "}
-            <span onClick={() => setAction("Login")}>Login</span>
-          </p>
-        )}
-      </div>
+   <div className="login-page-wrapper">
+  <div className="login-card">
+    <div className="login-header">
+      <h2 className="login-title">{action}</h2>
+      <div className="login-underline"></div>
     </div>
+
+    {validationMessage && (
+      <div className="login-validation">{validationMessage}</div>
+    )}
+
+    <div className="login-inputs">
+      {action === "Sign Up" ? (
+        <>
+          <div className="login-input">
+            <img src={user_icon} alt="user" />
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div className="login-input">
+            <img src={email_icon} alt="email" />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="login-input">
+            <img src={password_icon} alt="password" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="login-input">
+            <img src={user_icon} alt="user" />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+
+          <div className="login-input">
+            <img src={password_icon} alt="password" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </>
+      )}
+    </div>
+
+    {action === "Login" && (
+      <div className="login-remember">
+        <input
+          type="checkbox"
+          checked={rememberMe}
+          onChange={() => setRememberMe(!rememberMe)}
+        />
+        <label>Remember Me</label>
+      </div>
+    )}
+
+    <div className="login-buttons">
+      <button
+        className={`login-btn ${action === "Sign Up" ? "active" : "inactive"}`}
+        onClick={handleSignupClick}
+      >
+        Sign Up
+      </button>
+      <button
+        className={`login-btn ${action === "Login" ? "active" : "inactive"}`}
+        onClick={handleLoginClick}
+      >
+        Login
+      </button>
+      <button className="login-btn active" onClick={handleClassUrlClick}>
+        ClassUrl
+      </button>
+      <button className="login-btn active" onClick={handleClassGSMClick}>
+        GSM
+      </button>
+    </div>
+
+    <div className="login-toggle">
+      {action === "Login" ? (
+        <p>
+          Don’t have an account?{" "}
+          <span onClick={() => setAction("Sign Up")}>Sign Up</span>
+        </p>
+      ) : (
+        <p>
+          Already have an account?{" "}
+          <span onClick={() => setAction("Login")}>Login</span>
+        </p>
+      )}
+    </div>
+  </div>
+</div>
+
   );
 };
 

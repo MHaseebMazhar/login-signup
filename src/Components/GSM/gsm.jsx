@@ -105,29 +105,37 @@ if (loading) {
 
 
   return (
-    <div className="gsm-container">
-      <h2 className="title">📱 GSM Screen</h2>
+  <div className="gsm-container">
+    <h2 className="title">📱 GSM Screen</h2>
 
-      {loggedUser && (
-        <div className="login-card">
-          <h3>🔑 Logged In User</h3>
-          <p>
-            <strong>ID:</strong> {loggedUser.id || "N/A"}
-          </p>
-          <p>
-            <strong>Username:</strong>{" "}
-            {loggedUser.username || loggedUser.name || "N/A"}
-          </p>
-          <p>
-            <strong>Email:</strong> {loggedUser.email || "N/A"}
-          </p>
-          <p>
-            <strong>Gender:</strong> {loggedUser.gender || "N/A"}
-          </p>
-        </div>
-      )}
+    {loggedUser && (
+      <div className="login-card">
+        <h3>🔑 Logged In User</h3>
+        <p>
+          <strong>ID:</strong> {loggedUser.id || "N/A"}
+        </p>
+        <p>
+          <strong>Username:</strong>{" "}
+          {loggedUser.username || loggedUser.name || "N/A"}
+        </p>
+        <p>
+          <strong>Email:</strong> {loggedUser.email || "N/A"}
+        </p>
+        <p>
+          <strong>Gender:</strong> {loggedUser.gender || "N/A"}
+        </p>
+      </div>
+    )}
 
-      <h3 className="table-title">👥 All Users</h3>
+    <h3 className="table-title">👥 All Users</h3>
+
+    {/* ✅ Yahan loading check karo */}
+    {loading ? (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>Loading users...</p>
+      </div>
+    ) : (
       <div className="users-grid">
         {apiUsers.map((u) => (
           <div key={u.id} className="deal-card">
@@ -161,8 +169,10 @@ if (loading) {
           </div>
         ))}
       </div>
+    )}
 
-      {/* ✅ Pagination */}
+    {/* ✅ Pagination */}
+    {!loading && (
       <div className="pagination">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -190,36 +200,33 @@ if (loading) {
           Next ➡
         </button>
       </div>
+    )}
 
-      {/* ✅ Modal */}
-      {showModal && userToDelete && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>⚠ Delete Confirmation</h3>
-            <p>
-              Are you sure you want to delete
-              <b>
-                {" "}
-                {userToDelete.firstName} {userToDelete.lastName}
-              </b>
-              ?
-            </p>
-            <div className="modal-actions">
-              <button className="confirm-btn" onClick={handleDeleteConfirmed}>
-                Yes, Delete
-              </button>
-              <button
-                className="cancel-btn"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
+    {/* ✅ Modal */}
+    {showModal && userToDelete && (
+      <div className="modal-overlay">
+        <div className="modal">
+          <h3>⚠ Delete Confirmation</h3>
+          <p>
+            Are you sure you want to delete
+            <b>
+              {" "}
+              {userToDelete.firstName} {userToDelete.lastName}
+            </b>
+            ?
+          </p>
+          <div className="modal-actions">
+            <button className="confirm-btn" onClick={handleDeleteConfirmed}>
+              Yes, Delete
+            </button>
+            <button className="cancel-btn" onClick={() => setShowModal(false)}>
+              Cancel
+            </button>
           </div>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 };
-
 export default GSM;
