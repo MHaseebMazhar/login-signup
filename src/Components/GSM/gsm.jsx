@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthContext";
+import {
+  requestPermissionAndGetToken,
+  onMessageListener,
+} from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import "./gsm.css";
 
@@ -104,6 +108,52 @@ const GSM = () => {
     navigate(`/user/${u.id}`, { state: { user: u } });
   };
 
+  // ✅ Firebase Cloud Messaging integration
+  useEffect(() => {
+    let unsubscribe = null;
+
+    const initFCM = async () => {
+      if (!loggedUser) return;
+
+      // FCM token lena
+      const token = await requestPermissionAndGetToken();
+      if (token) {
+        console.log("FCM Token:", token);
+        // Agar backend hai to yahan token save karo
+        // await fetch("/api/save-fcm-token", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ userId: loggedUser.id, token }),
+        // });
+      }
+// Foreground notifications sunna
+unsubscribe = onMessageListener((payload) => {
+  console.log("Foreground notification:", payload);
+
+  // Notification ke data nikalna
+  const { title, body, icon } = payload.notification || {};
+
+  // Browser Notification show karna
+  if (Notification.permission === "granted") {
+    new Notification(title || "Notification", {
+      body: body || "",
+      icon: icon || "/logo192.png", // fallback icon (React default)
+    });
+
+    // Saath hi page reload
+    window.location.reload();
+  }
+});
+
+    };
+
+    initFCM();
+
+    return () => {
+      if (typeof unsubscribe === "function") unsubscribe();
+    };
+  }, [loggedUser]);
+
   return (
     <div className="gsm-container">
       <h2 className="title">📱 GSM Screen</h2>
@@ -112,7 +162,7 @@ const GSM = () => {
       {pageLoading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
-          <p>Loading...</p>
+          <p>Loading data...</p>
         </div>
       )}
 

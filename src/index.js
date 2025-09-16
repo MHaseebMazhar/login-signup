@@ -10,6 +10,17 @@ root.render(
     <App />
   </React.StrictMode>
 );
+// src/index.js (or main entry)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker registered:', registration);
+    })
+    .catch((err) => {
+      console.error('Service Worker register failed:', err);
+    });
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
