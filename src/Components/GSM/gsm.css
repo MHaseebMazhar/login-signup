@@ -285,20 +285,26 @@
 .cancel-btn:hover {
   background: #5a6268;
 }
-.loading-container {
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 70vh;
-  font-size: 18px;
-  color: #333;
+  z-index: 9999;
 }
 
 .spinner {
   width: 50px;
   height: 50px;
-  border: 6px solid #ddd;
+  border: 6px solid #eee;
   border-top: 6px solid #007bff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -306,6 +312,7 @@
 }
 
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
