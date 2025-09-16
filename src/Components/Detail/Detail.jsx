@@ -60,22 +60,9 @@ const UserDetail = () => {
     fetchUserDetail();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Loading user details...</p>
-      </div>
-    );
-  }
 
-  if (!user) {
-    return (
-      <div className="loading-container">
-        <p>❌ User not found</p>
-      </div>
-    );
-  }
+
+
 
   // Helper: safe fallback values
   const safe = (val, fallback = "Not Available") => val || fallback;
@@ -99,11 +86,11 @@ const UserDetail = () => {
   {/* Loading inside card */}
   {loading ? (
     <div className="loading-container-card">
-      <div className="spinner"></div>
-      <p>Loading user details...</p>
+      
+      
     </div>
   ) : !user ? (
-    <p>❌ User not found</p>
+    <p></p>
   ) : (
     <>
       {/* Profile Photo */}

@@ -33,7 +33,7 @@
 }
 
 .back-btn {
-  background: linear-gradient(135deg, #6c63ff, #4f46e5);
+  background: linear-gradient(135deg, #7e7bc9, #4f46e5);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -171,3 +171,4 @@
   margin-bottom: 15px;
 }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+ 

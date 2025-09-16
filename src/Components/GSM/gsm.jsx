@@ -11,20 +11,19 @@ const GSM = () => {
   const usersPerPage = 30;
   const [totalUsers, setTotalUsers] = useState(0);
 
-  // ✅ do alag loaders
-  const [pageLoading, setPageLoading] = useState(false);   // sirf users list fetch ke liye
-  const [detailLoading, setDetailLoading] = useState(false); // sirf detail ke waqt
+  // ✅ loader sirf API calls ke liye
+  const [pageLoading, setPageLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
   const navigate = useNavigate();
 
-  // ✅ Fetch users (sirf GSM page ke liye loader)
+  // ✅ Users fetch karna
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setPageLoading(true);
+        setPageLoading(true); // start loader
         const skip = (currentPage - 1) * usersPerPage;
         const res = await fetch(
           `https://dummyjson.com/users?limit=${usersPerPage}&skip=${skip}`
@@ -35,14 +34,14 @@ const GSM = () => {
       } catch (err) {
         console.error("API error:", err);
       } finally {
-        setPageLoading(false);
+        setPageLoading(false); // stop loader
       }
     };
 
     fetchUsers();
   }, [currentPage]);
 
-  // ✅ Logged-in user set
+  // ✅ Logged-in user set karna
   useEffect(() => {
     if (user) {
       setLoggedUser(user);
@@ -77,12 +76,12 @@ const GSM = () => {
     setShowModal(true);
   };
 
-  // ✅ Delete handler
+  // ✅ Delete API call
   const handleDeleteConfirmed = async () => {
     if (!userToDelete) return;
 
     try {
-      setPageLoading(true);
+      setPageLoading(true); // start loader
       const res = await fetch(
         `https://dummyjson.com/users/${userToDelete.id}`,
         { method: "DELETE" }
@@ -96,41 +95,24 @@ const GSM = () => {
     } catch (err) {
       console.error("Delete error:", err);
     } finally {
-      setPageLoading(false);
+      setPageLoading(false); // stop loader
     }
   };
 
-  // ✅ Detail handler (ab alag loader hoga)
-  const handleDetailClick = async (u) => {
-    try {
-      setDetailLoading(true); // sirf detail loader on
-      const res = await fetch(`https://dummyjson.com/users/${u.id}`);
-      const data = await res.json();
-      navigate(`/user/${u.id}`, { state: { user: data } });
-    } catch (err) {
-      console.error("Detail fetch error:", err);
-    } finally {
-      setDetailLoading(false); // loader off
-    }
+  // ✅ Detail handler → koi loader nahi
+  const handleDetailClick = (u) => {
+    navigate(`/user/${u.id}`, { state: { user: u } });
   };
 
   return (
     <div className="gsm-container">
       <h2 className="title">📱 GSM Screen</h2>
 
-      {/* ✅ Loader overlay (page fetch ke liye) */}
+      {/* ✅ Loader overlay sirf API calls ke time */}
       {pageLoading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
-          <p>Loading users...</p>
-        </div>
-      )}
-
-      {/* ✅ Loader overlay (detail ke liye) */}
-      {detailLoading && (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
-          <p>Loading user details...</p>
+          <p>Loading...</p>
         </div>
       )}
 
@@ -168,7 +150,6 @@ const GSM = () => {
               <span className="new-price">📧 {u.email}</span>
               <span className="old-price">📞 {u.phone}</span>
             </div>
-
             <div className="user-actions">
               <button className="add-btn" onClick={() => handleUserClick(u)}>
                 ➕ Edit
